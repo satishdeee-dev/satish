@@ -137,6 +137,68 @@ function showBrowserNotification(title, msg) {
   }
 }
 
+/* ---------- IT Company Logo Background (replaces bat/skyline visuals) ----------
+   Fetches avatar URLs for a curated list of well-known tech orgs from the
+   GitHub Organizations API, caches them in localStorage for 7 days, and
+   tiles them as a slow-drifting low-opacity grid across the viewport.
+*/
+const LOGO_CACHE_KEY = 'neuroquest_logos_v1';
+const LOGO_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const LOGO_ORGS = [
+  'microsoft', 'google', 'meta', 'netflix', 'apple', 'amazon', 'spotify',
+  'airbnb', 'uber', 'shopify', 'stripe', 'vercel', 'github', 'openai',
+  'figma', 'cloudflare', 'discord', 'mongodb', 'twilio', 'atlassian',
+];
+
+async function fetchLogoUrls() {
+  if (typeof window !== 'undefined') {
+    try {
+      const cached = JSON.parse(window.localStorage.getItem(LOGO_CACHE_KEY) || 'null');
+      if (cached && Date.now() - cached.t < LOGO_CACHE_TTL_MS && Array.isArray(cached.logos)) {
+        return cached.logos;
+      }
+    } catch {}
+  }
+  const results = await Promise.all(
+    LOGO_ORGS.map((org) =>
+      fetch(`https://api.github.com/orgs/${org}`)
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null),
+    ),
+  );
+  const logos = results
+    .filter((d) => d && d.avatar_url)
+    .map((d) => ({ name: d.name || d.login, url: d.avatar_url }));
+  if (typeof window !== 'undefined' && logos.length) {
+    try { window.localStorage.setItem(LOGO_CACHE_KEY, JSON.stringify({ t: Date.now(), logos })); } catch {}
+  }
+  return logos;
+}
+
+function LogoBackground() {
+  const [logos, setLogos] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    fetchLogoUrls().then((l) => { if (alive) setLogos(l); });
+    return () => { alive = false; };
+  }, []);
+
+  if (!logos.length) return null;
+  // Duplicate the list so the marquee loops seamlessly
+  const tiles = [...logos, ...logos];
+  return (
+    <div className="logo-bg" aria-hidden>
+      <div className="logo-track">
+        {tiles.map((l, i) => (
+          <div key={i} className="logo-cell" title={l.name}>
+            <img src={l.url} alt="" loading="lazy" referrerPolicy="no-referrer" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Background pieces (Batman / Gotham theme) ---------- */
 // Bat-shaped glyphs for the vertical streams (rain over Gotham)
 const GLYPHS = '⩕⩔⌒︵︶◣◢◤◥▴▾';
@@ -219,12 +281,9 @@ function BatmanBackground() {
   return (
     <>
       <div className="vignette" />
+      <LogoBackground />
       <div className="grid-bg" />
-      <div className="bat-signal" />
-      <BatSymbol className="bat-signal-icon" fill="#ffd60a" />
       <div className="scan" />
-      <BatSymbol className="gear tr" fill="#ffd60a" />
-      <BatSymbol className="gear bl" fill="#ffd60a" />
       <div className="nodes">
         {decor.nodes.map((n, i) => (
           <div
@@ -241,20 +300,6 @@ function BatmanBackground() {
           />
         ))}
       </div>
-      {decor.streams.map((s, i) => (
-        <div
-          key={i}
-          className="data"
-          style={{
-            left: `${s.left}%`,
-            animationDelay: `${s.delay}s`,
-            animationDuration: `${s.duration}s`,
-          }}
-        >
-          {s.text}
-        </div>
-      ))}
-      <GothamSkyline />
       <svg className="circuit tl" width="180" height="180" viewBox="0 0 180 180" fill="none">
         <path d="M0 26 H56 L74 44 H120 L138 62 H180" stroke="#ffd60a" strokeWidth="1.4" />
         <path d="M0 64 H40 L58 82 H100" stroke="#ffae00" strokeWidth="1.1" />
@@ -857,8 +902,8 @@ export default function AptitudeTest() {
               <WeatherWidget />
               <div>
                 <h1>NeuroQuest</h1>
-                <div className="subtitle" style={{ marginBottom: 14 }}>General Knowledge · Gotham Edition</div>
-                <p>Welcome to Gotham. Answer {questionsPerTest} general-knowledge questions. Score <b style={{ color: 'var(--gold)' }}>{passMark} or more</b> to light the Bat-Signal and clear the exam.</p>
+                <div className="subtitle" style={{ marginBottom: 14 }}>General Knowledge · Tech Industry Edition</div>
+                <p>Backed by real tech-industry APIs. Answer {questionsPerTest} general-knowledge questions from OpenTDB. Score <b style={{ color: 'var(--gold)' }}>{passMark} or more</b> to advance to the HR round and a real company match.</p>
                 <div className="meta">
                   <span className="pill">⏱ {secondsPerQ}s per question</span>
                   <span className="pill">⚡ {questionsPerTest} questions</span>
