@@ -217,6 +217,49 @@ body{
 }
 .music-btn:hover{transform:scale(1.08);border-color:var(--neon);box-shadow:0 0 14px rgba(58,166,255,.45)}
 .music-btn:focus{outline:none;box-shadow:0 0 14px rgba(58,166,255,.5)}
+
+/* ===== Weather + Time widget (top of intro) ===== */
+.weather-widget{
+  position:absolute;top:18px;right:22px;text-align:right;
+  background:var(--glass);border:1px solid var(--glass-bd);border-radius:14px;
+  padding:10px 14px;backdrop-filter:blur(10px);min-width:200px;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  font-size:12px;letter-spacing:.5px;z-index:5;
+}
+.weather-widget .ww-time{
+  font-size:22px;font-weight:800;color:var(--neon);
+  font-variant-numeric:tabular-nums;letter-spacing:1px;
+  text-shadow:0 0 10px rgba(255,214,10,.4);
+}
+.weather-widget .ww-date{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.weather-widget .ww-row{display:flex;align-items:center;gap:10px;justify-content:flex-end;border-top:1px dashed var(--glass-bd);padding-top:8px;margin-top:4px}
+.weather-widget .ww-icon{font-size:26px;line-height:1}
+.weather-widget .ww-stack{display:flex;flex-direction:column;align-items:flex-end}
+.weather-widget .ww-temp{font-size:13px;font-weight:700;color:var(--text)}
+.weather-widget .ww-city{font-size:11px;color:var(--muted)}
+@media (max-width:640px){
+  .weather-widget{position:static;margin:0 auto 14px;text-align:center;min-width:auto;max-width:300px}
+  .weather-widget .ww-row{justify-content:center}
+  .weather-widget .ww-stack{align-items:center}
+}
+
+/* ===== HR loading spinner ===== */
+.hr-spinner{
+  width:48px;height:48px;border-radius:50%;
+  border:3px solid rgba(255,214,10,.18);
+  border-top-color:var(--neon);
+  margin:18px auto 8px;
+  animation:hrSpin .9s linear infinite;
+}
+@keyframes hrSpin{to{transform:rotate(360deg)}}
+
+/* ===== Ghost button variant ===== */
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--glass-bd);box-shadow:none;font-weight:600}
+.btn.ghost:hover{border-color:var(--neon);box-shadow:0 0 12px rgba(255,214,10,.25)}
+
+/* ===== Company match card tweaks ===== */
+.company-card{max-width:560px}
+.company-card .pill{font-size:11px;padding:6px 10px}
 .qcount-num{color:var(--neon)}
 
 /* Circular Countdown */
