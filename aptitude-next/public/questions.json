@@ -1,9 +1,9 @@
 {
   "config": {
-    "passMark": 7,
-    "secondsPerQuestion": 30,
-    "questionsPerTest": 10,
-    "apiSource": "opentdb",
+    "passMark": 4,
+    "secondsPerQuestion": 60,
+    "questionsPerTest": 5,
+    "apiSource": "video",
     "apiCategory": 9
   },
   "questions": [

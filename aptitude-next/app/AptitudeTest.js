@@ -191,7 +191,8 @@ function LogoBackground() {
       <div className="logo-track">
         {tiles.map((l, i) => (
           <div key={i} className="logo-cell" title={l.name}>
-            <img src={l.url} alt="" loading="lazy" referrerPolicy="no-referrer" />
+            <img src={l.url} alt={l.name} loading="lazy" referrerPolicy="no-referrer" />
+            <div className="logo-name">{l.name}</div>
           </div>
         ))}
       </div>
@@ -429,9 +430,13 @@ function WeatherWidget() {
         if (!w?.current_weather) throw new Error('No current_weather');
         const cw = w.current_weather;
         const wmo = WMO[cw.weathercode] || { label: 'Unknown', icon: '🌡' };
+        const cc = (g?.countryCode || '').toLowerCase();
         setData({
           city: g?.city || g?.locality || g?.principalSubdivision || 'Unknown',
           country: g?.countryName || g?.countryCode || '',
+          countryCode: cc,
+          // FlagCDN — free, no key, public domain flag SVGs/PNGs
+          flagUrl: cc ? `https://flagcdn.com/h40/${cc}.png` : null,
           tempC: Math.round(cw.temperature),
           windKph: cw.windspeed,
           conditionLabel: wmo.label,
@@ -477,7 +482,17 @@ function WeatherWidget() {
           <span className="ww-icon" aria-hidden>{data.conditionIcon}</span>
           <div className="ww-stack">
             <div className="ww-temp">{data.tempC}°C · {data.conditionLabel}</div>
-            <div className="ww-city">📍 {data.city}{data.country ? `, ${data.country}` : ''}</div>
+            <div className="ww-city">
+              {data.flagUrl && (
+                <img
+                  src={data.flagUrl}
+                  alt={data.country || 'flag'}
+                  className="ww-flag"
+                  loading="lazy"
+                />
+              )}
+              <span>📍 {data.city}{data.country ? `, ${data.country}` : ''}</span>
+            </div>
           </div>
         </div>
       ) : err ? (
@@ -699,10 +714,21 @@ export default function AptitudeTest() {
     ensureMusicStarted();
 
     let set = null;
-    if (apiSource === 'opentdb') {
+    if (apiSource === 'video') {
+      try {
+        const r = await fetch(`/api/video-questions?count=${questionsPerTest}`, { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const data = await r.json();
+        if (Array.isArray(data?.questions) && data.questions.length) set = data.questions;
+        else throw new Error('Empty video pool');
+      } catch (err) {
+        console.warn('Video API fetch failed, falling back to OpenTDB / local pool:', err);
+        setApiNotice("Couldn't load video questions — using text questions.");
+      }
+    }
+    if (!set && (apiSource === 'opentdb' || apiSource === 'video')) {
       try {
         const apiQs = await fetchOtdbQuestions(questionsPerTest, apiCategory);
-        // OpenTDB already shuffles options inside our helper. Just pass through.
         set = apiQs;
       } catch (err) {
         console.warn('OpenTDB fetch failed, falling back to local pool:', err);
@@ -971,6 +997,16 @@ export default function AptitudeTest() {
 
               <div className="qwrap">
                 <span className="qnum">Question {idx + 1}</span>
+                {cur.embedUrl && (
+                  <div className="video-frame" key={`v-${idx}`}>
+                    <iframe
+                      src={cur.embedUrl}
+                      title={`Question ${idx + 1} video`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                )}
                 <div className="question" key={idx}>{cur.q}</div>
                 <div className="options">
                   {cur.o.map((opt, i) => {
