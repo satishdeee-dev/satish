@@ -1,0 +1,371 @@
+:root{
+  /* Batman / Gotham palette: deep black + bat-yellow + storm-blue accents */
+  --bg-1:#000000;
+  --bg-2:#070608;
+  --bg-3:#0e0c14;
+  --neon:#ffd60a;        /* bat-symbol gold */
+  --neon-2:#ffb000;      /* darker burnt gold */
+  --neon-3:#fff7c2;      /* pale signal beam */
+  --gold:#ffd60a;
+  --storm:#3a4a66;       /* gotham storm cloud */
+  --text:#ece4d0;        /* off-white parchment */
+  --muted:#6e6855;
+  --glass:rgba(255,214,10,0.04);
+  --glass-bd:rgba(255,214,10,0.22);
+  --right:#22e07a;
+  --wrong:#ff4d6d;
+  --grid:rgba(255,214,10,0.05);
+  --steel:rgba(180,180,180,0.03);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--text);overflow:hidden}
+body{
+  background:
+    /* moonlit sky behind clouds */
+    radial-gradient(ellipse at 70% -10%, rgba(255,214,10,0.08) 0%, transparent 35%),
+    /* deep gotham storm clouds bottom */
+    radial-gradient(ellipse at 30% 110%, rgba(58,74,102,0.18) 0%, transparent 50%),
+    /* faint city glow */
+    radial-gradient(ellipse at 50% 90%, rgba(255,176,0,0.07) 0%, transparent 40%),
+    linear-gradient(180deg, #0e0c14 0%, #050405 60%, #000 100%);
+  position:relative;
+}
+
+/* === Batman / Gotham Background ===
+   Layers (from back to front):
+   1. .vignette       — moon glow + storm clouds vignette
+   2. .grid-bg        — faint architectural grid (subtle)
+   3. .bat-signal     — yellow searchlight beam in the night sky
+   4. .fog            — drifting Gotham fog band
+   5. .skyline        — Gotham city silhouette pinned to the bottom
+   6. .gear (.tr/.bl) — rotating Bat-symbol watermarks
+   7. .nodes/.node    — distant city lights / yellow stars
+   8. .data           — vertical bat-glyph streams (rain-like)
+   9. .circuit        — corner architectural ironwork
+*/
+.grid-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:60px 60px;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);
+  mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);
+  opacity:.6;
+}
+
+/* Hex panel removed in Batman theme — keep selector for safety, render nothing */
+.hex-panel{display:none}
+
+/* Sweeping Bat-Signal beam in the night sky */
+.bat-signal{
+  position:fixed;
+  bottom:8vh; left:62vw;
+  width:480px; height:88vh;
+  background:linear-gradient(0deg,
+    rgba(255,214,10,0.0) 0%,
+    rgba(255,214,10,0.18) 25%,
+    rgba(255,247,194,0.32) 60%,
+    rgba(255,247,194,0.05) 95%);
+  clip-path:polygon(46% 100%, 54% 100%, 92% 0%, 8% 0%);
+  filter:blur(14px);
+  transform-origin:50% 100%;
+  pointer-events:none;z-index:0;
+  animation:signalSway 11s ease-in-out infinite alternate;
+  mix-blend-mode:screen;
+}
+@keyframes signalSway{
+  0%   { transform:rotate(-6deg); opacity:.7 }
+  100% { transform:rotate(6deg);  opacity:1 }
+}
+
+/* The bat icon at the top of the signal beam */
+.bat-signal-icon{
+  position:fixed;
+  top:8vh; left:calc(62vw + 240px);
+  width:140px; height:80px; transform:translateX(-50%);
+  pointer-events:none; z-index:0; opacity:.5;
+  filter:drop-shadow(0 0 20px rgba(255,214,10,0.65));
+  animation:batPulse 3.5s ease-in-out infinite;
+}
+@keyframes batPulse{
+  0%,100%{ opacity:.45; filter:drop-shadow(0 0 16px rgba(255,214,10,.5)) }
+  50%    { opacity:.85; filter:drop-shadow(0 0 28px rgba(255,214,10,.85)) }
+}
+
+/* Drifting Gotham fog band */
+.scan{
+  position:fixed;left:-10%;right:-10%;height:240px;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,
+    transparent,
+    rgba(58,74,102,0.22) 40%,
+    rgba(58,74,102,0.40) 50%,
+    rgba(58,74,102,0.22) 60%,
+    transparent);
+  animation:fogDrift 24s linear infinite;
+  filter:blur(40px);
+}
+@keyframes fogDrift{
+  0%{top:62vh}
+  100%{top:62vh; transform:translateX(40%)}
+}
+
+.vignette{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 75% 12%, rgba(255,247,194,0.10), transparent 25%),
+    radial-gradient(circle at 50% 95%, rgba(58,74,102,0.30), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.75) 100%);
+  filter:blur(20px);
+}
+
+/* Distant city lights / faint yellow stars */
+.nodes{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.node{
+  position:absolute;
+  background:var(--neon);
+  border-radius:50%;
+  box-shadow:0 0 6px var(--neon),0 0 14px rgba(255,214,10,0.4);
+  animation:starTwinkle 3s ease-in-out infinite;
+}
+.node:nth-child(4n+1){background:var(--neon-3);box-shadow:0 0 6px var(--neon-3),0 0 12px rgba(255,247,194,.5)}
+.node:nth-child(5n+2){background:#ffae00;box-shadow:0 0 6px #ffae00}
+@keyframes starTwinkle{
+  0%,100%{opacity:.25;transform:scale(.7)}
+  50%{opacity:1;transform:scale(1.2)}
+}
+
+/* Vertical streams — bat-shaped glyphs falling like rain */
+.data{
+  position:fixed;top:0;color:var(--neon);font-family:'Consolas','Courier New',monospace;
+  font-size:13px;line-height:1.05;letter-spacing:2px;writing-mode:vertical-rl;
+  opacity:.18;z-index:0;pointer-events:none;white-space:nowrap;
+  animation:dataFall 14s linear infinite;
+  text-shadow:0 0 8px var(--neon);
+}
+.data:nth-child(odd){color:var(--neon-3);text-shadow:0 0 8px var(--neon-3);opacity:.14}
+@keyframes dataFall{
+  0%{transform:translateY(-110vh)}
+  100%{transform:translateY(110vh)}
+}
+
+/* Rotating Bat-symbol watermarks (replacing the gear SVGs) */
+.gear{
+  position:fixed;z-index:0;pointer-events:none;opacity:.18;
+  animation:batSpin 60s linear infinite;
+  filter:drop-shadow(0 0 18px rgba(255,214,10,0.4));
+}
+.gear.tr{top:-40px;right:-40px;width:240px;height:240px}
+.gear.bl{bottom:-60px;left:-60px;width:300px;height:300px;animation-direction:reverse;animation-duration:80s;opacity:.12}
+@keyframes batSpin{to{transform:rotate(360deg)}}
+
+/* Gotham skyline silhouette pinned to the bottom of the viewport */
+.skyline{
+  position:fixed;left:0;right:0;bottom:0;height:160px;z-index:0;pointer-events:none;
+  opacity:.85;
+}
+.skyline svg{width:100%;height:100%;display:block}
+
+.circuit{position:fixed;z-index:0;pointer-events:none;opacity:.30}
+.circuit.tl{top:14px;left:14px}
+.circuit.br{bottom:14px;right:14px;transform:rotate(180deg)}
+
+/* Layout */
+.stage{
+  position:relative;z-index:2;height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.card{
+  width:min(880px,100%);min-height:520px;max-height:92vh;overflow:hidden;
+  background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+  border:1px solid var(--glass-bd);border-radius:24px;backdrop-filter:blur(18px);
+  box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05),0 0 60px rgba(0,229,255,.08);
+  padding:28px 32px;position:relative;
+}
+.card::before{
+  content:"";position:absolute;inset:-1px;border-radius:24px;padding:1px;
+  background:linear-gradient(135deg,var(--neon),transparent 30%,transparent 70%,var(--neon-2));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.6;
+}
+
+/* Header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:44px;height:44px;border-radius:12px;
+  background:conic-gradient(from 0deg,var(--neon),var(--neon-2),var(--neon-3),var(--neon));
+  display:grid;place-items:center;font-weight:800;color:#0b0c2a;
+  box-shadow:0 0 20px rgba(0,229,255,.5);animation:spinSlow 8s linear infinite;
+}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+.title{font-size:20px;letter-spacing:1px;font-weight:700}
+.subtitle{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+
+.hud{display:flex;gap:14px;align-items:center}
+.pill{
+  background:var(--glass);border:1px solid var(--glass-bd);padding:8px 14px;border-radius:999px;
+  font-size:13px;display:flex;align-items:center;gap:8px;
+}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--neon);box-shadow:0 0 10px var(--neon)}
+.score-num{color:var(--gold);font-weight:700}
+
+/* Music toggle button (HUD) */
+.music-btn{
+  width:38px;height:38px;border-radius:50%;border:1px solid var(--glass-bd);
+  background:var(--glass);color:var(--text);cursor:pointer;font-size:16px;
+  display:grid;place-items:center;transition:transform .2s,border-color .2s,box-shadow .2s,background .2s;
+}
+.music-btn:hover{transform:scale(1.08);border-color:var(--neon);box-shadow:0 0 14px rgba(58,166,255,.45)}
+.music-btn:focus{outline:none;box-shadow:0 0 14px rgba(58,166,255,.5)}
+.qcount-num{color:var(--neon)}
+
+/* Circular Countdown */
+.timer-ring{position:relative;width:64px;height:64px;flex:0 0 auto;}
+.timer-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer-ring .track{fill:none;stroke:rgba(255,255,255,.08);stroke-width:6}
+.timer-ring .progress{
+  fill:none;stroke:var(--neon-3);stroke-width:6;stroke-linecap:round;
+  stroke-dasharray:175.93;stroke-dashoffset:0;
+  transition:stroke-dashoffset 1s linear,stroke .3s;
+  filter:drop-shadow(0 0 6px var(--neon-3));
+}
+.timer-ring .num{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-weight:800;font-size:18px;color:var(--neon-3);
+  transition:color .3s;
+}
+.timer-ring.warn .progress{stroke:var(--gold);filter:drop-shadow(0 0 6px var(--gold))}
+.timer-ring.warn .num{color:var(--gold)}
+.timer-ring.danger .progress{stroke:var(--wrong);filter:drop-shadow(0 0 8px var(--wrong))}
+.timer-ring.danger .num{color:var(--wrong);animation:pulseDanger .6s ease-in-out infinite}
+.timer-ring.stopped .progress{stroke:var(--muted);filter:none;animation:none}
+.timer-ring.stopped .num{color:var(--muted)}
+.timer-ring.stopped::after{
+  content:"STOPPED";position:absolute;left:50%;top:calc(100% + 4px);transform:translateX(-50%);
+  font-size:9px;letter-spacing:1.5px;color:var(--muted);white-space:nowrap;font-weight:700;
+}
+@keyframes pulseDanger{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+
+/* Progress */
+.progress{
+  height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-bottom:22px;
+  position:relative;
+}
+.bar{
+  height:100%;width:0%;background:linear-gradient(90deg,var(--neon),var(--neon-2),var(--gold));
+  border-radius:999px;transition:width .6s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 12px var(--neon);
+}
+
+/* Question */
+.qwrap{position:relative;min-height:340px}
+.question{
+  font-size:22px;line-height:1.35;font-weight:600;margin-bottom:20px;
+  opacity:0;transform:translateY(14px);animation:rise .6s .05s forwards;
+}
+.qnum{
+  display:inline-block;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--neon);
+  margin-bottom:10px;padding:4px 10px;border:1px solid rgba(0,229,255,.4);border-radius:999px;
+  background:rgba(0,229,255,.06);
+}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.options{grid-template-columns:1fr}.question{font-size:18px}.card{padding:20px}}
+.opt{
+  position:relative;cursor:pointer;user-select:none;
+  background:var(--glass);border:1px solid var(--glass-bd);border-radius:14px;
+  padding:14px 16px 14px 50px;font-size:15px;
+  transition:transform .25s,border-color .25s,background .25s,box-shadow .25s;
+  opacity:0;transform:translateY(14px);animation:rise .6s forwards;
+}
+.opt:nth-child(1){animation-delay:.1s}
+.opt:nth-child(2){animation-delay:.18s}
+.opt:nth-child(3){animation-delay:.26s}
+.opt:nth-child(4){animation-delay:.34s}
+.opt:hover{transform:translateY(-2px);border-color:var(--neon);box-shadow:0 6px 20px rgba(0,229,255,.18)}
+.opt .marker{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);border:1px solid var(--glass-bd);font-weight:700;font-size:13px;color:var(--neon);
+}
+.opt.correct{
+  background:linear-gradient(135deg,rgba(34,224,122,.25),rgba(34,224,122,.05));
+  border-color:var(--right);box-shadow:0 0 25px rgba(34,224,122,.4);
+  animation:pulseRight .6s ease;
+}
+.opt.wrong{
+  background:linear-gradient(135deg,rgba(255,77,109,.25),rgba(255,77,109,.05));
+  border-color:var(--wrong);box-shadow:0 0 25px rgba(255,77,109,.4);
+  animation:shake .5s ease;
+}
+.opt.correct .marker{background:var(--right);color:#0b0c2a;border-color:var(--right)}
+.opt.wrong .marker{background:var(--wrong);color:#fff;border-color:var(--wrong)}
+.opt.locked{pointer-events:none;opacity:.7}
+@keyframes pulseRight{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+.footer{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:12px}
+.hint{font-size:12px;color:var(--muted)}
+.btn{
+  background:linear-gradient(135deg,var(--neon),var(--neon-2));color:#0b0c2a;font-weight:700;
+  border:none;padding:12px 22px;border-radius:12px;cursor:pointer;letter-spacing:1px;
+  box-shadow:0 8px 20px rgba(0,229,255,.3);transition:transform .2s, box-shadow .2s, opacity .2s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,229,255,.4)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Toast */
+.toast{
+  position:fixed;top:24px;right:-420px;z-index:50;width:360px;
+  background:linear-gradient(135deg,rgba(34,224,122,.95),rgba(0,229,255,.95));
+  color:#0b0c2a;padding:16px 18px;border-radius:14px;
+  box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 30px rgba(34,224,122,.5);
+  transition:right .6s cubic-bezier(.2,.8,.2,1);font-weight:600;
+}
+.toast.show{right:24px}
+.toast .t-title{font-size:16px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.toast .t-msg{font-size:13px;opacity:.9}
+
+/* Result Modal */
+.modal{
+  position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+  background:rgba(5,5,20,.6);backdrop-filter:blur(8px);
+  animation:fadeIn .35s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.result{
+  width:min(520px,92%);background:linear-gradient(145deg,#0a2436,#02060d);
+  border:1px solid var(--glass-bd);border-radius:24px;padding:32px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);animation:popIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.result h2{font-size:28px;margin-bottom:8px;background:linear-gradient(90deg,var(--neon),var(--neon-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.result p{color:var(--muted);margin-bottom:18px}
+.ring-result{
+  width:160px;height:160px;border-radius:50%;margin:10px auto 16px;display:grid;place-items:center;
+  position:relative;
+}
+.ring-result::before{content:"";position:absolute;inset:10px;border-radius:50%;background:#02060d}
+.ring-result .num{position:relative;font-size:38px;font-weight:800;color:var(--text)}
+.ring-result .num small{font-size:14px;color:var(--muted);font-weight:500}
+.badge{
+  display:inline-block;padding:6px 14px;border-radius:999px;font-size:12px;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.badge.pass{background:rgba(34,224,122,.15);color:var(--right);border:1px solid rgba(34,224,122,.4)}
+.badge.fail{background:rgba(255,77,109,.15);color:var(--wrong);border:1px solid rgba(255,77,109,.4)}
+
+.confetti-canvas{position:fixed;inset:0;z-index:55;pointer-events:none}
+
+/* Intro */
+.intro{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;animation:rise .6s forwards}
+.intro h1{
+  font-size:42px;letter-spacing:2px;margin-bottom:12px;
+  background:linear-gradient(90deg,var(--neon),var(--gold),var(--neon-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:hueShift 6s linear infinite;
+}
+@keyframes hueShift{0%,100%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(60deg)}}
+.intro p{color:var(--muted);max-width:520px;margin:0 auto 22px;line-height:1.6}
+.meta{display:flex;justify-content:center;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+.meta .pill{font-size:12px}

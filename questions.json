@@ -1,0 +1,58 @@
+{
+  "config": {
+    "passMark": 7,
+    "secondsPerQuestion": 30
+  },
+  "questions": [
+    {
+      "q": "If a train travels 60 km in 1.5 hours, what is its average speed?",
+      "o": ["30 km/h", "40 km/h", "45 km/h", "50 km/h"],
+      "a": 1
+    },
+    {
+      "q": "Find the next number in the series: 2, 6, 12, 20, 30, ?",
+      "o": ["40", "42", "44", "46"],
+      "a": 1
+    },
+    {
+      "q": "A man buys an item for ₹400 and sells it for ₹500. What is his profit percentage?",
+      "o": ["20%", "25%", "30%", "15%"],
+      "a": 1
+    },
+    {
+      "q": "Which word does NOT belong with the others?",
+      "o": ["Inch", "Kilogram", "Centimeter", "Yard"],
+      "a": 1
+    },
+    {
+      "q": "If CAT = 24 and DOG = 26, then BAT = ?",
+      "o": ["22", "23", "25", "27"],
+      "a": 0
+    },
+    {
+      "q": "A clock shows 3:15. What is the angle between the hour and minute hand?",
+      "o": ["0°", "7.5°", "15°", "30°"],
+      "a": 1
+    },
+    {
+      "q": "If you rearrange the letters 'CIFAIPC', you'd get the name of a(n)?",
+      "o": ["Country", "City", "Ocean", "Animal"],
+      "a": 2
+    },
+    {
+      "q": "What comes next? J, F, M, A, M, J, J, A, ?",
+      "o": ["O", "S", "N", "D"],
+      "a": 1
+    },
+    {
+      "q": "Pointing to a man, Sara said, 'He is the son of my mother's only son.' How is the man related to Sara?",
+      "o": ["Brother", "Cousin", "Nephew", "Son"],
+      "a": 2
+    },
+    {
+      "q": "If 5 machines make 5 widgets in 5 minutes, how long do 100 machines take to make 100 widgets?",
+      "o": ["1 minute", "5 minutes", "20 minutes", "100 minutes"],
+      "a": 1
+    }
+  ]
+}

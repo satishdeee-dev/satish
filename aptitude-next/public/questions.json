@@ -1,0 +1,159 @@
+{
+  "config": {
+    "passMark": 7,
+    "secondsPerQuestion": 30,
+    "questionsPerTest": 10
+  },
+  "questions": [
+    {
+      "q": "Which planet in our solar system has the most moons?",
+      "o": ["Jupiter", "Saturn", "Uranus", "Neptune"],
+      "a": 1
+    },
+    {
+      "q": "Who painted the Mona Lisa?",
+      "o": ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+      "a": 2
+    },
+    {
+      "q": "What is the smallest country in the world by area?",
+      "o": ["Monaco", "San Marino", "Vatican City", "Liechtenstein"],
+      "a": 2
+    },
+    {
+      "q": "Which element has the chemical symbol 'Au'?",
+      "o": ["Silver", "Gold", "Aluminium", "Argon"],
+      "a": 1
+    },
+    {
+      "q": "In which year did World War II end?",
+      "o": ["1942", "1945", "1948", "1950"],
+      "a": 1
+    },
+    {
+      "q": "What is the longest river in the world?",
+      "o": ["Amazon", "Nile", "Yangtze", "Mississippi"],
+      "a": 1
+    },
+    {
+      "q": "Which language has the most native speakers worldwide?",
+      "o": ["English", "Spanish", "Hindi", "Mandarin Chinese"],
+      "a": 3
+    },
+    {
+      "q": "Mount Everest lies on the border of Nepal and which other country?",
+      "o": ["India", "China", "Bhutan", "Pakistan"],
+      "a": 1
+    },
+    {
+      "q": "Who wrote the play 'Romeo and Juliet'?",
+      "o": ["Charles Dickens", "Jane Austen", "William Shakespeare", "Mark Twain"],
+      "a": 2
+    },
+    {
+      "q": "What is the hardest naturally occurring substance on Earth?",
+      "o": ["Steel", "Diamond", "Quartz", "Granite"],
+      "a": 1
+    },
+    {
+      "q": "Which ocean is the largest?",
+      "o": ["Atlantic", "Indian", "Arctic", "Pacific"],
+      "a": 3
+    },
+    {
+      "q": "How many continents are there on Earth?",
+      "o": ["5", "6", "7", "8"],
+      "a": 2
+    },
+    {
+      "q": "The Great Wall of China was primarily built to defend against which group?",
+      "o": ["Mongols and other northern nomads", "Japanese invaders", "Russian armies", "Persian empires"],
+      "a": 0
+    },
+    {
+      "q": "Which gas do plants primarily absorb from the atmosphere for photosynthesis?",
+      "o": ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"],
+      "a": 2
+    },
+    {
+      "q": "The currency of Japan is the:",
+      "o": ["Won", "Yuan", "Yen", "Ringgit"],
+      "a": 2
+    },
+    {
+      "q": "Who was the first person to walk on the Moon?",
+      "o": ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "Michael Collins"],
+      "a": 2
+    },
+    {
+      "q": "What is the largest desert in the world?",
+      "o": ["Sahara", "Gobi", "Kalahari", "Antarctic Desert"],
+      "a": 3
+    },
+    {
+      "q": "How many bones are in the adult human body?",
+      "o": ["186", "206", "226", "246"],
+      "a": 1
+    },
+    {
+      "q": "Which is the largest organ in the human body?",
+      "o": ["Liver", "Brain", "Lungs", "Skin"],
+      "a": 3
+    },
+    {
+      "q": "Which country gifted the Statue of Liberty to the United States?",
+      "o": ["United Kingdom", "Spain", "France", "Germany"],
+      "a": 2
+    },
+    {
+      "q": "The Eiffel Tower is located in which city?",
+      "o": ["Rome", "Paris", "Berlin", "Vienna"],
+      "a": 1
+    },
+    {
+      "q": "Which is the smallest planet in our solar system?",
+      "o": ["Mars", "Mercury", "Venus", "Pluto"],
+      "a": 1
+    },
+    {
+      "q": "What is the boiling point of water at sea level in Celsius?",
+      "o": ["90 °C", "100 °C", "110 °C", "120 °C"],
+      "a": 1
+    },
+    {
+      "q": "Which sport is associated with Wimbledon?",
+      "o": ["Cricket", "Tennis", "Golf", "Football"],
+      "a": 1
+    },
+    {
+      "q": "Who developed the theory of general relativity?",
+      "o": ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Stephen Hawking"],
+      "a": 1
+    },
+    {
+      "q": "Which is the most spoken language in Brazil?",
+      "o": ["Spanish", "English", "Portuguese", "French"],
+      "a": 2
+    },
+    {
+      "q": "What is the capital of Australia?",
+      "o": ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+      "a": 2
+    },
+    {
+      "q": "Which famous scientist formulated the laws of motion?",
+      "o": ["Albert Einstein", "Isaac Newton", "Nikola Tesla", "Marie Curie"],
+      "a": 1
+    },
+    {
+      "q": "How many colours are there in a rainbow?",
+      "o": ["5", "6", "7", "8"],
+      "a": 2
+    },
+    {
+      "q": "Which is the only mammal capable of true sustained flight?",
+      "o": ["Flying squirrel", "Bat", "Sugar glider", "Colugo"],
+      "a": 1
+    }
+  ]
+}
