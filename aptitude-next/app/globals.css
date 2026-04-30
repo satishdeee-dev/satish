@@ -18,7 +18,8 @@
   --steel:rgba(180,180,180,0.03);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--text);overflow:hidden}
+html,body{min-height:100%;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--text);overflow-x:hidden;overflow-y:auto}
+html{scroll-behavior:smooth}
 body{
   background:
     /* moonlit sky behind clouds */
@@ -172,14 +173,30 @@ body{
 
 /* Layout */
 .stage{
-  position:relative;z-index:2;height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  position:relative;z-index:2;
+  min-height:100vh;min-height:100dvh; /* dynamic viewport on mobile */
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(12px,3vw,24px) clamp(12px,3vw,24px) clamp(40px,6vw,60px);
 }
 .card{
-  width:min(880px,100%);min-height:520px;max-height:92vh;overflow:hidden;
+  width:min(880px,100%);
+  min-height:auto;
+  max-height:none;
   background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
-  border:1px solid var(--glass-bd);border-radius:24px;backdrop-filter:blur(18px);
+  border:1px solid var(--glass-bd);border-radius:clamp(16px,2.5vw,24px);
+  backdrop-filter:blur(18px);
   box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05),0 0 60px rgba(0,229,255,.08);
-  padding:28px 32px;position:relative;
+  padding:clamp(18px,3.5vw,32px);
+  position:relative;
+}
+@media (min-width:1024px){
+  .card{min-height:520px}
+}
+@media (max-width:639px){
+  /* Card grows naturally; the page scrolls (not the card) for natural mobile UX */
+  .card{max-height:none}
+  /* Hide the gradient outline pseudo-border on small screens to keep edges clean */
+  .card::before{display:none}
 }
 .card::before{
   content:"";position:absolute;inset:-1px;border-radius:24px;padding:1px;
@@ -189,8 +206,16 @@ body{
 }
 
 /* Header */
-.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
-.brand{display:flex;align-items:center;gap:12px}
+.top{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;margin-bottom:18px;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;flex:0 0 auto}
+.title{white-space:nowrap}
+@media (max-width:639px){
+  .top{gap:10px;margin-bottom:14px}
+  .brand{gap:10px}
+}
 .logo{
   width:44px;height:44px;border-radius:12px;
   background:conic-gradient(from 0deg,var(--neon),var(--neon-2),var(--neon-3),var(--neon));
@@ -201,7 +226,11 @@ body{
 .title{font-size:20px;letter-spacing:1px;font-weight:700}
 .subtitle{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
 
-.hud{display:flex;gap:14px;align-items:center}
+.hud{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;flex:1 1 auto;min-width:0}
+@media (max-width:639px){
+  .hud{width:100%;justify-content:flex-start}
+  .hud .pill{padding:6px 10px;font-size:12px}
+}
 .pill{
   background:var(--glass);border:1px solid var(--glass-bd);padding:8px 14px;border-radius:999px;
   font-size:13px;display:flex;align-items:center;gap:8px;
@@ -264,11 +293,16 @@ body{
 
 /* ===== Weather + Time widget (top of intro) ===== */
 .weather-widget{
-  position:absolute;top:18px;right:22px;text-align:right;
   background:var(--glass);border:1px solid var(--glass-bd);border-radius:14px;
-  padding:10px 14px;backdrop-filter:blur(10px);min-width:200px;
+  padding:10px 14px;backdrop-filter:blur(10px);
   box-shadow:0 4px 14px rgba(0,0,0,.35);
   font-size:12px;letter-spacing:.5px;z-index:5;
+  text-align:right;align-self:flex-end;
+  width:fit-content;min-width:200px;
+}
+@media (min-width:1024px){
+  /* On desktop, pin top-right of the card */
+  .weather-widget{position:absolute;top:18px;right:22px}
 }
 .weather-widget .ww-time{
   font-size:22px;font-weight:800;color:var(--neon);
@@ -289,9 +323,10 @@ body{
   .weather-widget .ww-city{justify-content:center}
 }
 @media (max-width:640px){
-  .weather-widget{position:static;margin:0 auto 14px;text-align:center;min-width:auto;max-width:300px}
+  .weather-widget{margin:0 auto 14px;text-align:center;min-width:auto;max-width:300px;align-self:center}
   .weather-widget .ww-row{justify-content:center}
   .weather-widget .ww-stack{align-items:center}
+  .weather-widget .ww-time{font-size:18px}
 }
 
 /* ===== Video question embed ===== */
@@ -365,10 +400,13 @@ body{
 }
 
 /* Question */
-.qwrap{position:relative;min-height:340px}
+.qwrap{position:relative}
 .question{
   font-size:22px;line-height:1.35;font-weight:600;margin-bottom:20px;
   opacity:0;transform:translateY(14px);animation:rise .6s .05s forwards;
+}
+@media (min-width:1024px){
+  .qwrap{min-height:340px}
 }
 .qnum{
   display:inline-block;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--neon);
@@ -376,7 +414,16 @@ body{
   background:rgba(0,229,255,.06);
 }
 .options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:640px){.options{grid-template-columns:1fr}.question{font-size:18px}.card{padding:20px}}
+.qwrap{position:relative;min-height:0}
+.question{font-size:clamp(16px,2.4vw,22px)}
+@media (max-width:640px){
+  .options{grid-template-columns:1fr;gap:10px}
+  .opt{padding:12px 14px 12px 46px;font-size:14px}
+  .opt .marker{left:10px;width:24px;height:24px;font-size:12px}
+}
+@media (max-width:380px){
+  .opt{padding:10px 12px 10px 42px}
+}
 .opt{
   position:relative;cursor:pointer;user-select:none;
   background:var(--glass);border:1px solid var(--glass-bd);border-radius:14px;
@@ -411,7 +458,11 @@ body{
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 @keyframes rise{to{opacity:1;transform:translateY(0)}}
 
-.footer{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:12px}
+.footer{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:12px;flex-wrap:wrap}
+@media (max-width:639px){
+  .footer{flex-direction:column;align-items:stretch;gap:10px}
+  .footer .btn{width:100%;text-align:center}
+}
 .hint{font-size:12px;color:var(--muted)}
 .btn{
   background:linear-gradient(135deg,var(--neon),var(--neon-2));color:#0b0c2a;font-weight:700;
@@ -438,13 +489,18 @@ body{
   position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
   background:rgba(5,5,20,.6);backdrop-filter:blur(8px);
   animation:fadeIn .35s ease;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:clamp(12px,3vw,24px);
 }
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .result{
-  width:min(520px,92%);background:linear-gradient(145deg,#0a2436,#02060d);
-  border:1px solid var(--glass-bd);border-radius:24px;padding:32px;text-align:center;position:relative;overflow:hidden;
+  width:min(520px,100%);background:linear-gradient(145deg,#0a2436,#02060d);
+  border:1px solid var(--glass-bd);border-radius:clamp(16px,2.5vw,24px);
+  padding:clamp(20px,3.5vw,32px);text-align:center;position:relative;
   box-shadow:0 30px 80px rgba(0,0,0,.6);animation:popIn .5s cubic-bezier(.34,1.56,.64,1);
+  max-height:calc(100dvh - 48px);overflow-y:auto;
 }
+.result h2{font-size:clamp(20px,3vw,28px)}
 @keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
 .result h2{font-size:28px;margin-bottom:8px;background:linear-gradient(90deg,var(--neon),var(--neon-2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .result p{color:var(--muted);margin-bottom:18px}
@@ -465,9 +521,18 @@ body{
 .confetti-canvas{position:fixed;inset:0;z-index:55;pointer-events:none}
 
 /* Intro */
-.intro{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;animation:rise .6s forwards}
+.intro{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:clamp(14px,3vw,30px);min-height:auto;gap:12px;
+  animation:rise .6s forwards;
+}
+@media (min-width:1024px){
+  /* Push intro to fill the card height on desktop */
+  .intro{min-height:480px}
+}
+.intro > div:not(.weather-widget){width:100%;max-width:640px}
 .intro h1{
-  font-size:42px;letter-spacing:2px;margin-bottom:12px;
+  font-size:clamp(28px,5vw,44px);letter-spacing:2px;margin-bottom:12px;
   background:linear-gradient(90deg,var(--neon),var(--gold),var(--neon-2));
   -webkit-background-clip:text;background-clip:text;color:transparent;
   animation:hueShift 6s linear infinite;
