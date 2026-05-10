@@ -26,15 +26,3 @@ Thumbs.db
 
 # Local Claude settings (not part of source code)
 .claude/settings.local.json
-.claude/worktrees/
-
-# Sibling projects in this Desktop folder that aren't part of this repo
-/AirBnB/
-/Brokenmart/
-/Kids Story/
-/Story/
-/lazy-app/
-/Lazy app/
-/new project/
-/supabase/
-/Lazy/
